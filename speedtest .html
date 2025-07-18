@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Typing Master by vishnu chhimpa </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary-light: #4fc3f7;
+            --primary-dark: #01579b;
+            --secondary-light: #9575cd;
+            --secondary-dark: #4527a0;
+            --accent-light: #81c784;
+            --accent-dark: #388e3c;
+            --background-light: #f5f5f5;
+            --background-dark: #212121;
+            --text-light: #333333;
+            --text-dark: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .monospace {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .active-char {
+            background-color: rgba(79, 195, 247, 0.2);
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .correct-char {
+            color: var(--accent-dark);
+        }
+        
+        .incorrect-char {
+            color: #f44336;
+            text-decoration: underline;
+        }
+        
+        .theme-light {
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --accent: var(--accent-light);
+            --background: var(--background-light);
+            --text: var(--text-light);
+        }
+        
+        .theme-dark {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --accent: var(--accent-dark);
+            --background: var(--background-dark);
+            --text: var(--text-dark);
+        }
+        
+        .theme-cool {
+            --primary: #40c4ff;
+            --secondary: #00b0ff;
+            --accent: #00e5ff;
+            --background: #1a237e;
+            --text: #e1f5fe;
+        }
+        
+        .theme-warm {
+            --primary: #ff7043;
+            --secondary: #ff5722;
+            --accent: #ff9800;
+            --background: #fff3e0;
+            --text: #3e2723;
+        }
+        
+        .theme-nature {
+            --primary: #689f38;
+            --secondary: #33691e;
+            --accent: #8bc34a;
+            --background: #f1f8e9;
+            --text: #1b5e20;
+        }
+        
+        body[data-theme="light"] {
+            background-color: var(--background-light);
+            color: var(--text-light);
+        }
+        
+        body[data-theme="dark"] {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+        
+        body[data-theme="cool"] {
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        body[data-theme="warm"] {
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        body[data-theme="nature"] {
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        .theme-btn-light {
+            background-color: var(--primary-light);
+        }
+        
+        .theme-btn-dark {
+            background-color: var(--primary-dark);
+        }
+        
+        .theme-btn-cool {
+            background-color: var(--primary);
+        }
+        
+        .theme-btn-warm {
+            background-color: var(--primary);
+        }
+        
+        .theme-btn-nature {
+            background-color: var(--primary);
+        }
+    </style>
+</head>
+<body data-theme="light" class="min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold mb-2">Speed Typing Master by vishnu chhimpa</h1>
+            <p class="text-lg">Improve your typing speed and accuracy with fun exercises</p>
+        </header>
+
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button class="theme-btn-light px-4 py-2 rounded-full shadow-md" onclick="setTheme('light')">Light</button>
+            <button class="theme-btn-dark px-4 py-2 rounded-full shadow-md" onclick="setTheme('dark')">Dark</button>
+            <button class="theme-btn-cool px-4 py-2 rounded-full shadow-md" onclick="setTheme('cool')">Cool Blue</button>
+            <button class="theme-btn-warm px-4 py-2 rounded-full shadow-md" onclick="setTheme('warm')">Warm Orange</button>
+            <button class="theme-btn-nature px-4 py-2 rounded-full shadow-md" onclick="setTheme('nature')">Nature Green</button>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-lg">
+                <span id="timer">00:00</span> | 
+                <span id="wpm">0 WPM</span> | 
+                <span id="accuracy">100%</span>
+            </div>
+            <button id="reset-btn" class="px-4 py-2 rounded-md shadow">Reset</button>
+        </div>
+
+        <div class="mb-8 flex justify-between">
+            <div class="mr-4 flex-grow">
+                <label for="paragraph-select" class="block mb-2">Select Paragraph:</label>
+                <select id="paragraph-select" class="w-full p-2 rounded border">
+                    <option value="0">Basic Typing Practice</option>
+                    <option value="1">Programming Terms</option>
+                    <option value="2">Famous Quotes</option>
+                    <option value="3">Tech Jargon</option>
+                    <option value="4">Nature Description</option>
+                </select>
+            </div>
+            <div class="ml-4 flex-grow">
+                <label for="difficulty" class="block mb-2">Difficulty:</label>
+                <select id="difficulty" class="w-full p-2 rounded border">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="typing-area" class="mb-8 p-6 rounded-lg shadow-lg">
+            <div id="paragraph" class="mb-8 text-lg leading-relaxed monospace"></div>
+            <textarea id="input-field" class="w-full p-4 border rounded-lg focus:outline-none focus:ring-2" placeholder="Start typing here..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Key Combinations</h3>
+                <ul class="list-disc pl-5">
+                    <li class="mb-1"><span class="font-mono bg-gray-200 px-2 py-1 rounded">Ctrl + Space</span> - Reset test</li>
+                    <li class="mb-1"><span class="font-mono bg-gray-200 px-2 py-1 rounded">Esc</span> - Focus input</li>
+                    <li class="mb-1"><span class="font-mono bg-gray-200 px-2 py-1 rounded">Tab</span> - Next paragraph</li>
+                </ul>
+            </div>
+            <div class="p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Stats</h3>
+                <div id="stats" class="space-y-2">
+                    <div>Characters: <span id="char-count">0</span></div>
+                    <div>Words: <span id="word-count">0</span></div>
+                    <div>Errors: <span id="error-count">0</span></div>
+                </div>
+            </div>
+            <div class="p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Tips</h3>
+                <ul class="list-disc pl-5">
+                    <li class="mb-1">Keep your fingers on home row</li>
+                    <li class="mb-1">Don't look at the keyboard</li>
+                    <li class="mb-1">Practice daily for best results</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <img src="https://placehold.co/800x400" alt="Person typing on a mechanical keyboard with hands in proper position, focusing on screen with text flowing animation" class="mx-auto rounded-lg shadow-xl" />
+        </div>
+    </div>
+
+    <footer class="py-4 text-center text-sm">
+        <p>Speed Typing Master &copy; 2023 | Practice makes perfect!</p>
+        <p>Generated the website by vishnu chhimpa</p>
+    </footer>
+
+    <script>
+        // Paragraphs collection
+        const paragraphs = [
+            "The quick brown fox jumps over the lazy dog. This sentence contains all the letters in the English alphabet. Typing such pangrams helps improve your familiarity with all letter positions on the keyboard. Consistent practice is key to mastering touch typing skills and increasing your words per minute.",
+            "A function in programming is a reusable block of code that performs a specific task. Variables store data values and loops iterate through collections. Conditional statements make decisions in code. APIs enable different software systems to communicate.",
+            "The only way to do great work is to love what you do. - Steve Jobs. Innovation distinguishes between a leader and a follower. - Steve Jobs. Your time is limited, so don't waste it living someone else's life. - Steve Jobs.",
+            "JavaScript frameworks enhance web development efficiency. React utilizes a virtual DOM for performance optimization. Responsive design ensures cross-device compatibility. Asynchronous programming prevents blocking operations.",
+            "The forest canopy filtered sunlight into golden shafts that illuminated delicate ferns and moss-covered logs. A babbling brook meandered through ancient trees while birds chirped melodic tunes overhead. Nature's symphony created a tranquil atmosphere that soothed the soul."
+        ];
+
+        // Initialize DOM elements
+        const paragraphEl = document.getElementById('paragraph');
+        const inputField = document.getElementById('input-field');
+        const timerEl = document.getElementById('timer');
+        const wpmEl = document.getElementById('wpm');
+        const accuracyEl = document.getElementById('accuracy');
+        const charCountEl = document.getElementById('char-count');
+        const wordCountEl = document.getElementById('word-count');
+        const errorCountEl = document.getElementById('error-count');
+        const paragraphSelect = document.getElementById('paragraph-select');
+        const resetBtn = document.getElementById('reset-btn');
+        const difficultySelect = document.getElementById('difficulty');
+
+        // Typing state variables
+        let currentParagraph = '';
+        let timerInterval;
+        let startTime;
+        let errors = 0;
+        let totalTyped = 0;
+        let correctTyped = 0;
+        let isTyping = false;
+
+        // Initialize the app
+        function init() {
+            loadParagraph(0);
+            setupEventListeners();
+        }
+
+        // Load a paragraph by index
+        function loadParagraph(index) {
+            currentParagraph = paragraphs[index];
+            renderParagraph();
+            resetStats();
+        }
+
+        // Render the paragraph with spans for each character
+        function renderParagraph() {
+            paragraphEl.innerHTML = '';
+            currentParagraph.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                paragraphEl.appendChild(span);
+            });
+        }
+
+        // Reset all stats and timer
+        function resetStats() {
+            clearInterval(timerInterval);
+            timerEl.textContent = '00:00';
+            wpmEl.textContent = '0 WPM';
+            accuracyEl.textContent = '100%';
+            charCountEl.textContent = '0';
+            wordCountEl.textContent = '0';
+            errorCountEl.textContent = '0';
+            
+            errors = 0;
+            totalTyped = 0;
+            correctTyped = 0;
+            isTyping = false;
+            
+            inputField.value = '';
+            inputField.focus();
+            
+            // Reset character styling
+            const spans = paragraphEl.querySelectorAll('span');
+            spans.forEach(span => {
+                span.className = '';
+            });
+            
+            if (spans.length > 0) {
+                spans[0].classList.add('active-char');
+            }
+        }
+
+        // Start the typing test
+        function startTest() {
+            if (!isTyping) {
+                startTime = new Date();
+                timerInterval = setInterval(updateTimer, 100);
+                isTyping = true;
+            }
+        }
+
+        // Update the timer display
+        function updateTimer() {
+            const currentTime = new Date();
+            const elapsed = new Date(currentTime - startTime);
+            
+            const minutes = String(elapsed.getMinutes()).padStart(2, '0');
+            const seconds = String(elapsed.getSeconds()).padStart(2, '0');
+            
+            timerEl.textContent = `${minutes}:${seconds}`;
+            
+            // Update WPM every 2 seconds
+            if (elapsed.getSeconds() % 2 === 0) {
+                updateWPM();
+            }
+        }
+
+        // Calculate and update WPM
+        function updateWPM() {
+            const currentTime = new Date();
+            const elapsedMinutes = (currentTime - startTime) / 60000;
+            
+            if (elapsedMinutes > 0) {
+                const words = inputField.value.trim().split(/\s+/).length;
+                const wpm = Math.round(words / elapsedMinutes);
+                wpmEl.textContent = `${wpm} WPM`;
+            }
+        }
+
+        // Calculate and update accuracy
+        function updateAccuracy() {
+            const accuracy = totalTyped > 0 ? Math.round((correctTyped / totalTyped) * 100) : 100;
+            accuracyEl.textContent = `${accuracy}%`;
+            return accuracy;
+        }
+
+        // Update character styling based on typing
+        function updateCharacterStyling(input) {
+            const spans = paragraphEl.querySelectorAll('span');
+            
+            // Reset all active chars
+            spans.forEach(span => {
+                span.classList.remove('active-char');
+            });
+            
+            let newErrors = 0;
+            
+            // Update styling for typed characters
+            for (let i = 0; i < input.length; i++) {
+                if (i < spans.length) {
+                    if (input[i] === spans[i].textContent) {
+                        spans[i].className = 'correct-char';
+                        correctTyped++;
+                    } else {
+                        spans[i].className = 'incorrect-char';
+                        newErrors++;
+                    }
+                }
+            }
+            
+            // Highlight next active character if available
+            if (input.length < spans.length) {
+                spans[input.length].classList.add('active-char');
+            }
+            
+            errors += newErrors;
+            errorCountEl.textContent = errors;
+            
+            // Update counts
+            charCountEl.textContent = input.length;
+            wordCountEl.textContent = input.trim() === '' ? 0 : input.trim().split(/\s+/).length;
+        }
+
+        // Handle theme change
+        function setTheme(themeName) {
+            document.body.setAttribute('data-theme', themeName);
+            
+            // Adjust input field styling based on theme
+            if (themeName === 'dark' || themeName === 'cool') {
+                inputField.classList.add('bg-gray-700', 'text-white');
+                inputField.classList.remove('bg-white', 'text-gray-800');
+            } else {
+                inputField.classList.remove('bg-gray-700', 'text-white');
+                inputField.classList.add('bg-white', 'text-gray-800');
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            inputField.addEventListener('input', (e) => {
+                startTest();
+                
+                const input = e.target.value;
+                
+                totalTyped++;
+                updateCharacterStyling(input);
+                updateAccuracy();
+                
+                // If reached end of paragraph
+                if (input.length === currentParagraph.length) {
+                    clearInterval(timerInterval);
+                    const finalWPM = wpmEl.textContent;
+                    const finalAccuracy = updateAccuracy();
+                    
+                    setTimeout(() => {
+                        alert(`Test complete!\nWPM: ${finalWPM}\nAccuracy: ${finalAccuracy}%`);
+                        resetStats();
+                    }, 500);
+                }
+            });
+            
+            inputField.addEventListener('keydown', (e) => {
+                // Ctrl + Space to reset
+                if (e.ctrlKey && e.code === 'Space') {
+                    e.preventDefault();
+                    resetStats();
+                }
+                
+                // Tab to load next paragraph
+                if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const nextIndex = (parseInt(paragraphSelect.value) + 1) % paragraphs.length;
+                    paragraphSelect.value = nextIndex;
+                    loadParagraph(nextIndex);
+                }
+                
+                // Esc to focus input field
+                if (e.key === 'Escape') {
+                    inputField.focus();
+                }
+            });
+            
+            paragraphSelect.addEventListener('change', (e) => {
+                loadParagraph(parseInt(e.target.value));
+            });
+            
+            resetBtn.addEventListener('click', resetStats);
+            
+            // Global keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Focus input field when typing starts
+                if (!inputField.contains(document.activeElement) && 
+                    e.key.length === 1 && 
+                    !e.ctrlKey && 
+                    !e.metaKey && 
+                    !e.altKey) {
+                    inputField.focus();
+                    inputField.value += e.key;
+                    inputField.dispatchEvent(new Event('input'));
+                }
+            });
+            
+            // Focus input field when clicking typing area
+            document.getElementById('typing-area').addEventListener('click', () => {
+                inputField.focus();
+            });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
